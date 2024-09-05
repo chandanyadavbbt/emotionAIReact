@@ -1,0 +1,9 @@
+#webcam {
+    position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 200px; 
+      height: auto;
+      border: 5px solid #465C69; 
+      border-radius: 10px;
+    }
