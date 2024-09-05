@@ -16,6 +16,8 @@ const Question = ({ data }) => {
     Surprise: 0
   });
   // console.log(data,"this is data")
+  const [isQuizCompleted, setIsQuizCompleted] = useState(false); // Track quiz completion
+  const [summary, setSummary] = useState([]); // Store summary of all questions
 
   useEffect(() => {
     // Fetch questions from the backend
@@ -44,6 +46,7 @@ const Question = ({ data }) => {
   }, [data]);
 
   const handleNextQuestion = (nextQuestionIndex, optionId) => {
+    const isLastQuestion = nextQuestionIndex >= questions.length;
     // Save emotion counts to local storage
     const currentQuestion = questions[currentQuestionIndex];
     if (currentQuestion) {
@@ -51,6 +54,11 @@ const Question = ({ data }) => {
         `q${currentQuestionIndex + 1}`,
         JSON.stringify(emotionCounts)
       );
+    }
+    if (isLastQuestion) {
+      setIsQuizCompleted(true); // Mark quiz as completed
+      calculateSummary(); // Calculate summary once the quiz is completed
+      return;
     }
 
     // Reset emotion counts for the next question
@@ -75,6 +83,41 @@ const Question = ({ data }) => {
   const isOptionSelected = (optionId) => {
     return selectedOptions[questions[currentQuestionIndex]?.id] === optionId;
   };
+
+
+
+  // ====================
+    // Calculate the percentage summary of emotions for each question
+    const calculateSummary = () => {
+      const summaryArray = [];
+  
+      for (let i = 0; i < questions.length; i++) {
+        const savedEmotionCounts = JSON.parse(localStorage.getItem(`q${i + 1}`));
+  
+        if (savedEmotionCounts) {
+          const totalEmotions = Object.values(savedEmotionCounts).reduce(
+            (acc, count) => acc + count,
+            0
+          ); // Total emotion counts for the question
+  
+          // Calculate percentage for each emotion
+          const percentageCounts = {};
+          for (let emotion in savedEmotionCounts) {
+            const count = savedEmotionCounts[emotion];
+            percentageCounts[emotion] =
+              totalEmotions > 0 ? ((count / totalEmotions) * 100).toFixed(2) : 0;
+          }
+  
+          summaryArray.push({
+            question: `Question ${i + 1}`,
+            percentages: percentageCounts,
+          });
+        }
+      }
+  
+      setSummary(summaryArray); // Store the summary
+    };
+  
 
   const renderQuestion = () => {
     if (questions.length === 0) return null; // Avoid rendering until questions are fetched
@@ -105,14 +148,34 @@ const Question = ({ data }) => {
       </div>
     );
   };
+  // ===========================
+  const renderSummary = () => {
+    return (
+      <div className="summary-container">
+        <h2>Emotion Summary (Percentage wise):</h2>
+        {summary.map((item, index) => (
+          <div key={index} className="summary-item">
+            <h3>{item.question}</h3>
+            <ul>
+              {Object.entries(item.percentages).map(([emotion, percentage]) => (
+                <li key={emotion}>
+                  {emotion}: {percentage}%
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    );
+  };
 
   return (
     <>
       <div className="quiz-container">
         <div className="quiz-container-counter">
-          <TimerComponent />
+          <TimerComponent  isQuizCompleted={isQuizCompleted}/>
         </div>
-        {renderQuestion()}
+        {isQuizCompleted ? renderSummary() : renderQuestion()}
       </div>
     </>
   );
