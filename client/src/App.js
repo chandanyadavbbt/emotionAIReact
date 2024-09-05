@@ -10,6 +10,7 @@ const App = () => {
   const [CY, setCY] = useState(null);
   const [eventData, setEventData] = useState(null); // State to store event data
   const [questionDisplay,setQuestionDisplay]=useState(false)
+  const [faces,setFaces]=useState(null)
 
   useEffect(() => {
     const loadScript = (src) => {
@@ -50,7 +51,8 @@ const App = () => {
   function handleQuestion(){
     setQuestionDisplay(true)
   }
-  // console.log(questionDisplay)
+
+  // console.log(eventData.face_detector.totalFaces)
 
   return (
     <div className="App">
