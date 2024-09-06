@@ -9,8 +9,7 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
 
     <App />
-    // <Popup/>
-    // <h1>Hello</h1>
+   
   
 );
 

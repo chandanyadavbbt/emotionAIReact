@@ -84,11 +84,13 @@
     display: flex;
     width: 100%;
     gap: 8px;
-    justify-content: flex-end;
+    justify-content: center;
+    transform: translateY(-25px);
   }
   .counter{
     color: #DE2E7D;
     font-size: 16px;
     font-weight: 600;
+    font-size: 18px;
   }
  

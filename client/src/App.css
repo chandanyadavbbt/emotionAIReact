@@ -24,7 +24,7 @@ body {
   color: #DE2E7D;
   font-size: 40px;
 }
-.start{
+ button,.start{
   padding: 12px;
   width: 150px;
   border-radius: 8px;
@@ -34,4 +34,12 @@ body {
   background-color: #DE2E7D;
   color: white;
   border: 1px solid #DE2E7D;
+  margin: 10px;
+}
+.app-header-welcome{
+  font-size: 48px;
+}
+.app-header-welcome-p{
+  color: white;
+  font-size: 32px;
 }

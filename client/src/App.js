@@ -60,7 +60,9 @@ const App = () => {
     <header className="App-header">
       {!questionDisplay ? (
         <>
-          <h1>Welcome to the self-Assessment Test. To start assessment click <span>Start</span></h1>
+          {/* <h1>Welcome to the self-Assessment Test. To start assessment click <span>below</span></h1> */}
+          <h1 className='app-header-welcome'>Welcome to the self-Assessment Test. </h1>
+          <p className='app-header-welcome-p' style={{textAlign:"center"}}>To start assessment click below</p>
           <button className="start" onClick={handleQuestion}>Start</button>
         </>
       ) : (
