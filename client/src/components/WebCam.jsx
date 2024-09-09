@@ -29,17 +29,20 @@ const WebCam = () => {
   }, []);
 
   return (
-    <></>
-    // <div style={{ position: 'fixed', top: '10px', right: '10px' }}>
-    //   <video
-    //     ref={videoRef}
-    //     id="webcam"
-    //     autoPlay
-    //     playsInline
+  <>
+
+    
+    <div style={{ position: 'fixed', top: '10px', right: '10px' }}>
+      <video
+        ref={videoRef}
+        id="webcam"
+        autoPlay
+        playsInline
         
-    //   />
+        />
      
-    // </div>
+    </div>
+        </>
   );
 };
 

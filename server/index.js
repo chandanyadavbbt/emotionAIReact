@@ -45,18 +45,7 @@ const questions = [
       { id: 'd', text: 'Well' },
       { id: 'e', text: 'Very Well' },
     ]
-   },
-  {
-    id: 4,
-    text: "Answer this question properly?",
-    options: [
-      { id: 'a', text: 'Very Poorly' },
-      { id: 'b', text: 'Poorly' },
-      { id: 'c', text: 'Adequately' },
-      { id: 'd', text: 'Well' },
-      { id: 'e', text: 'Very Well' },
-    ]
-  }
+   }
 ];
 
 // Endpoint to get questions

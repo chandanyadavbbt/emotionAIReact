@@ -11,6 +11,7 @@ const App = () => {
   const [eventData, setEventData] = useState(null); // State to store event data
   const [questionDisplay,setQuestionDisplay]=useState(false)
   const [faces,setFaces]=useState(null)
+  const [showCamera,setShowCamera]=useState(false)
 
   useEffect(() => {
     const loadScript = (src) => {
@@ -56,7 +57,9 @@ const App = () => {
 
   return (
     <div className="App">
-    <Header />
+      <div className='welcome-section'>
+
+    <Header  setShowCamera={setShowCamera}/>
     <header className="App-header">
       {!questionDisplay ? (
         <>
@@ -69,10 +72,11 @@ const App = () => {
         <Question data={eventData} />
       )}
     </header>
-    {CY && <WebcamComponent CY={CY} />}
+    {CY && <WebcamComponent showCamera={showCamera} setShowCamera={setShowCamera} CY={CY} />}
     {eventData && <EventInfo data={eventData} />}
-    <WebCam />
+    {showCamera &&<WebCam />}
   </div>
+      </div>
   
   );
 };
