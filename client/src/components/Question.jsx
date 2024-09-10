@@ -3,7 +3,7 @@ import './question.css';
 import TimerComponent from './TimeComponent';
 
 const Question = ({ data }) => {
-  console.log(data)
+  
   const [questions, setQuestions] = useState([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedOptions, setSelectedOptions] = useState({});
@@ -20,8 +20,9 @@ const Question = ({ data }) => {
   const [summary, setSummary] = useState([]); 
   const [summaryData, setSummaryData] = useState([]); 
   const [startTime, setStartTime] = useState(null); 
-  const [questionStartTime, setQuestionStartTime] = useState(null); 
+  const [questionStartTime, setQuestionStartTime] = useState(null);
   const [totalQuizTime, setTotalQuizTime] = useState(0); 
+  console.log(questions)
 
   useEffect(() => {
     // Fetch questions from the backend
@@ -43,21 +44,21 @@ const Question = ({ data }) => {
         if (dominantEmotion && emotion[dominantEmotion] !== undefined) {
           setEmotionCounts((prevCounts) => {
             const updatedCounts = { ...prevCounts };
-            updatedCounts[dominantEmotion] += 1;
+            updatedCounts[dominantEmotion] += 1; // Increment count of dominant emotion
             return updatedCounts;
           });
         }
       }
     }
 
-    setQuestionStartTime(Date.now()); 
+    setQuestionStartTime(Date.now()); // Start time for each question
   }, [data, currentQuestionIndex]);
 
   const handleNextQuestion = (nextQuestionIndex, optionId) => {
     const isLastQuestion = nextQuestionIndex >= questions.length;
     const questionEndTime = Date.now(); 
     const timeTakenForQuestion = (questionEndTime - questionStartTime) / 1000; 
-
+  
     // Save emotion counts and time taken to local storage
     const currentQuestion = questions[currentQuestionIndex];
     if (currentQuestion) {
@@ -69,16 +70,17 @@ const Question = ({ data }) => {
         })
       );
     }
-
+  
     if (isLastQuestion) {
       const totalTimeTaken = (questionEndTime - startTime) / 1000; 
       setTotalQuizTime(totalTimeTaken);
       setIsQuizCompleted(true); 
       calculateSummary(); 
+  
+     
       return;
     }
-
-    
+  
     setEmotionCounts({
       Angry: 0,
       Disgust: 0,
@@ -88,7 +90,7 @@ const Question = ({ data }) => {
       Sad: 0,
       Surprise: 0,
     });
-
+  
     // Update selected options and move to the next question
     setSelectedOptions({
       ...selectedOptions,
@@ -206,23 +208,23 @@ const Question = ({ data }) => {
   const renderSummary = () => {
     return (
       <div className="summary-container">
-        <h2>Emotion Summary</h2>
-        {summary.map((item, index) => (
-          <div key={index} className="summary-item">
-            <h3>{item.question}</h3>
-            <ul>
-              {Object.entries(item.percentages).map(([emotion, percentage]) => (
-                <li key={emotion}>
-                  {emotion}: {percentage}%
-                </li>
-              ))}
-            </ul>
-            <p>Time taken: {item.timeTaken} seconds</p>
-            <p>Selected Option: {item.selectedOption}</p>
-          </div>
-        ))}
-        <p>Total Quiz Time: {totalQuizTime} seconds</p>
-      </div>
+      <h2>Emotion Summary</h2>
+      {summary.map((item, index) => (
+        <div key={index} className="summary-item">
+          <h3>{item.question}</h3>
+          <ul>
+            {Object.entries(item.percentages).map(([emotion, percentage]) => (
+              <li key={emotion}>
+                {emotion}: {percentage}%
+              </li>
+            ))}
+          </ul>
+          <p>Time taken: {item.timeTaken} seconds</p>
+          <p>Selected Option: {item.selectedOption}</p>
+        </div>
+      ))}
+      <p>Total Quiz Time: {totalQuizTime} seconds</p>
+    </div>
     );
   };
 
@@ -230,7 +232,9 @@ const Question = ({ data }) => {
     <>
       <div className="quiz-container">
         <div className="quiz-container-counter">
-          <TimerComponent />
+          {/* <TimerComponent isQuizCompleted={isOptionSelected}/> */}
+          <TimerComponent isQuizCompleted={isQuizCompleted} />
+
         </div>
         {isQuizCompleted ? (
           <div>
@@ -247,4 +251,4 @@ const Question = ({ data }) => {
   );
 };
 
-export default Question;
+export default Question;                                 

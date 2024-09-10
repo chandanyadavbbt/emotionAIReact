@@ -1,7 +1,7 @@
 import React from 'react';
 
 const WebcamComponent = ({ CY,setShowCamera,showCamera }) => {
-  console.log(showCamera)
+  
   function handleCamera(){
     showCamera?setShowCamera(false):setShowCamera(true)
 
