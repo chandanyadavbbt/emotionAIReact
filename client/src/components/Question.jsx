@@ -22,7 +22,8 @@ const Question = ({ data }) => {
   const [startTime, setStartTime] = useState(null); 
   const [questionStartTime, setQuestionStartTime] = useState(null);
   const [totalQuizTime, setTotalQuizTime] = useState(0); 
-  console.log(questions)
+  
+  
 
   useEffect(() => {
     // Fetch questions from the backend
@@ -106,60 +107,86 @@ const Question = ({ data }) => {
   // Calculate the percentage summary of emotions for each question
   const calculateSummary = () => {
     const summaryArray = [];
-
+  
     for (let i = 0; i < questions.length; i++) {
       const savedData = JSON.parse(localStorage.getItem(`q${i + 1}`));
-
+  
       if (savedData) {
         const { emotionCounts, timeTaken } = savedData;
-
+  
         const totalEmotions = Object.values(emotionCounts).reduce(
           (acc, count) => acc + count,
           0
         ); // Total emotion counts for the question
-
+  
         // Calculate percentage for each emotion
         const percentageCounts = {};
+        let dominantEmotion = null;
+        let maxPercentage = 0;
+  
         for (let emotion in emotionCounts) {
           const count = emotionCounts[emotion];
-          percentageCounts[emotion] =
-            totalEmotions > 0
-              ? ((count / totalEmotions) * 100).toFixed(2)
-              : 0;
+          const percentage = totalEmotions > 0
+            ? ((count / totalEmotions) * 100).toFixed(2)
+            : 0;
+          percentageCounts[emotion] = percentage;
+  
+          // Determine the dominant emotion with the highest percentage
+          if (percentage > maxPercentage) {
+            maxPercentage = percentage;
+            dominantEmotion = emotion;
+          }
         }
-
+  
         summaryArray.push({
-          question: `Question ${i + 1}`,
+          question: questions[i].text,  // Add the question text to the summary
           percentages: percentageCounts,
-          timeTaken, // Add time taken for the question
-          selectedOption: selectedOptions[questions[i].id], // Add selected response
+          timeTaken: `${timeTaken} seconds`,
+          selectedOption: selectedOptions[questions[i].id],  // Add selected response
+          dominantEmotion: dominantEmotion ? `${dominantEmotion} (${maxPercentage}%)` : "None", // Add dominant emotion with its percentage
         });
       }
     }
-
+  
     setSummary(summaryArray); // Store the summary
     setSummaryData(summaryArray); // Update summaryData for download
   };
+  
 
   // download summary
   const downloadSummary = () => {
     const dataToDownload = {
-      totalQuizTime: `${totalQuizTime} seconds`, // Add total quiz time to the download
-      questions: summaryData.map((item, index) => ({
+      totalQuizTime: `${totalQuizTime} seconds`,
+      questions: summaryData.map((item) => ({
         question: item.question,
         percentages: item.percentages,
-        timeTaken: `${item.timeTaken} seconds`, // Include time taken for each question
-        selectedOption: item.selectedOption, // Include selected option
+        timeTaken: `${item.timeTaken} seconds`,
+        selectedOption: item.selectedOption,
       })),
     };
-
-    const blob = new Blob([JSON.stringify(dataToDownload, null, 2)], {
-      type: 'application/json',
-    });
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.download = 'quiz_summary.json';
-    link.click();
+  
+    // Send the data to the backend and receive a PDF
+    fetch('http://localhost:4000/api/save-summary', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(dataToDownload),
+    })
+      .then((response) => response.blob())  // Convert the response to a blob
+      .then((blob) => {
+        // Create a link to download the PDF
+        const url = window.URL.createObjectURL(new Blob([blob]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', 'quiz_summary.pdf');
+        document.body.appendChild(link);
+        link.click();
+        link.parentNode.removeChild(link); // Clean up the link element after download
+      })
+      .catch((error) => {
+        console.error('Error downloading PDF:', error);
+      });
   };
 
   const handleRestart = () => {
@@ -207,24 +234,27 @@ const Question = ({ data }) => {
 
   const renderSummary = () => {
     return (
-      <div className="summary-container">
-      <h2>Emotion Summary</h2>
-      {summary.map((item, index) => (
-        <div key={index} className="summary-item">
-          <h3>{item.question}</h3>
-          <ul>
-            {Object.entries(item.percentages).map(([emotion, percentage]) => (
-              <li key={emotion}>
-                {emotion}: {percentage}%
-              </li>
-            ))}
-          </ul>
-          <p>Time taken: {item.timeTaken} seconds</p>
-          <p>Selected Option: {item.selectedOption}</p>
-        </div>
-      ))}
-      <p>Total Quiz Time: {totalQuizTime} seconds</p>
-    </div>
+    //   <div className="summary-container">
+    //   <h2>Emotion Summary</h2>
+    //   {summary.map((item, index) => (
+    //     <div key={index} className="summary-item">
+    //       <h3>{item.question}</h3> {/* Display the question */}
+    //       <ul>
+    //         {Object.entries(item.percentages).map(([emotion, percentage]) => (
+    //           <li key={emotion}>
+    //             {emotion}: {percentage}%
+    //           </li>
+    //         ))}
+    //       </ul>
+    //       <p>Time taken: {item.timeTaken} seconds</p>
+    //       <p>Selected Option: {item.selectedOption}</p>
+    //       <p>Dominant Emotion: {item.dominantEmotion}</p> 
+    //     </div>
+    //   ))}
+    //   <p>Total Quiz Time: {totalQuizTime} seconds</p>
+    // </div>
+    <>
+    </>
     );
   };
 
@@ -251,4 +281,4 @@ const Question = ({ data }) => {
   );
 };
 
-export default Question;                                 
+export default Question;              
