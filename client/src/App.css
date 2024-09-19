@@ -63,3 +63,35 @@ body {
   z-index: -1; 
   opacity: 0.5; 
 }
+.links{
+  margin-left: 10rem;
+  display: flex;
+  width: 800px;
+  justify-content: space-between;
+  align-items: center;
+
+}
+.link{
+  list-style-type:none;
+  font-size: 20px;
+  font-weight: 600;
+  color: white;
+  color: #DE2E7D;
+  cursor: pointer;
+  position: relative;
+}
+.link::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  background-color: #DE2E7D;
+  bottom: -5px;
+  left: 0;
+  transition: width 0.3s ease; /* Smooth transition */
+}
+
+.link:hover::after, 
+.link:focus::after {
+  width: 100%; /* Expands the underline on hover or focus */
+}

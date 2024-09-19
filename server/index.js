@@ -53,6 +53,28 @@ const questions = [
     },
 ];
 
+// Endpoint to add a new question
+app.post('/api/questions', (req, res) => {
+    const newQuestion = req.body;
+    questions.push(newQuestion); // Add the new question to the array
+    res.status(201).json({ message: 'Question added successfully', questions });
+});
+
+// Endpoint to edit an existing question
+app.put('/api/questions/:id', (req, res) => {
+    const { id } = req.params;
+    const updatedQuestion = req.body;
+    const questionIndex = questions.findIndex(q => q.id == id);
+
+    if (questionIndex !== -1) {
+        questions[questionIndex] = updatedQuestion;
+        res.status(200).json({ message: 'Question updated successfully', questions });
+    } else {
+        res.status(404).json({ message: 'Question not found' });
+    }
+});
+
+
 // Endpoint to get questions
 app.get('/api/questions', (req, res) => {
     res.json(questions);
@@ -62,10 +84,8 @@ app.get('/api/questions', (req, res) => {
 app.post('/api/save-summary', (req, res) => {
     const summaryData = req.body;
 
-    console.log('Received summary data:', summaryData.questions);
-
     // Create a PDF document
-    const doc = new PDFDocument();
+    const doc = new PDFDocument({ margin: 50 });
 
     // Set the headers to indicate a file download
     res.setHeader('Content-Type', 'application/pdf');
@@ -74,29 +94,56 @@ app.post('/api/save-summary', (req, res) => {
     // Pipe the PDF stream to the response
     doc.pipe(res);
 
-    // Add content to the PDF
-    doc.fontSize(16).text('Quiz Summary', { underline: true });
+    // Add title with custom styling
+    doc.fontSize(20)
+        .fillColor('#2E86C1')  // Blue color for title
+        .text('Quiz Summary', { align: 'center', underline: true })
+        .moveDown(1.5);
 
+    // Loop through each question
     summaryData.questions.forEach((question, index) => {
-        doc.moveDown()
-            .fontSize(14)
-            .text(`Question ${index + 1}: ${question.question}`);
-    
+        // Add question title with bold styling
+        doc.fontSize(14)
+            .fillColor('#000000')  // Black color for question text
+            .text(`Question ${index + 1}: ${question.question}`, { bold: true })
+            .moveDown(0.5);
+
+        // Add selected option and time taken
         doc.fontSize(12)
+            .fillColor('#424949')  // Dark grey for details
             .text(`Selected Option: ${question.selectedOption || 'N/A'}`)
-            .text(`Time Taken: ${question.timeTaken || 'N/A'}`);
-    
-        doc.moveDown()
-            .text('Emotions:');
-    
-        // List the emotion percentages, but skip if value is 0
+            .moveDown(0.3);
+
+        doc.fontSize(12)
+            .fillColor('#424949')  // Dark grey for details
+            .text(`Time Taken: ${question.timeTaken || 'N/A'}`)
+            .moveDown(1);
+
+        // Add emotion percentages if they are greater than 0
+        const emotionColors = {
+            Happy: '#F4D03F',  // Yellow
+            Sad: '#5DADE2',    // Blue
+            Angry: '#E74C3C',  // Red
+            Disgust: '#28B463',// Green
+            Fear: '#9B59B6',   // Purple
+            Surprise: '#F39C12',// Orange
+            Neutral: '#95A5A6' // Grey
+        };
+
+        doc.fontSize(12)
+            .fillColor('#2E86C1')  // Blue color for emotions heading
+            .text('Emotions:', { underline: true });
+
         for (const [emotion, percentage] of Object.entries(question.percentages)) {
             if (percentage > 0) {
-                doc.text(`  - ${emotion}: ${percentage}%`);
+                doc.fillColor(emotionColors[emotion] || '#000000')  // Apply specific emotion color
+                    .text(`  - ${emotion}: ${percentage}%`);
             }
         }
+
+        doc.moveDown(1);  // Add spacing between questions
     });
-    
+
     // Finalize the PDF and end the stream
     doc.end();
 });
