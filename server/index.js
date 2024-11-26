@@ -51,14 +51,60 @@ const questions = [
             { id: 'e', text: 'Very Well' },
         ]
     },
+    {
+        id: 4,
+        text: "How often do you experience difficulty sleeping?",
+        options: [
+            { id: 'a', text: 'Never' },
+            { id: 'b', text: 'Rarely' },
+            { id: 'c', text: 'Sometimes' },
+            { id: 'd', text: 'Often' },
+            { id: 'e', text: 'Always' },
+        ]
+    },
+    {
+        id: 5,
+        text: "How frequently do you experience stress in your daily life?",
+        options: [
+            { id: 'a', text: 'Never' },
+            { id: 'b', text: 'Rarely' },
+            { id: 'c', text: 'Sometimes' },
+            { id: 'd', text: 'Often' },
+            { id: 'e', text: 'Always' },
+        ]
+    },
+    {
+        id: 6,
+        text: "How often do you engage in physical exercise each week?",
+        options: [
+            { id: 'a', text: 'Not at all' },
+            { id: 'b', text: 'Once or twice' },
+            { id: 'c', text: 'Three to four times' },
+            { id: 'd', text: 'Five to six times' },
+            { id: 'e', text: 'Daily' },
+        ]
+    }
 ];
 
 // Endpoint to add a new question
+// Endpoint to add a new question
 app.post('/api/questions', (req, res) => {
     const newQuestion = req.body;
+    
+    // Ensure new question has a unique ID based on the current questions array length
+    newQuestion.id = questions.length + 1;
+
+    // Ensure options have correct structure with incremental ids (a, b, c, etc.)
+    newQuestion.options = newQuestion.options.map((option, index) => ({
+        id: String.fromCharCode(97 + index), // 'a', 'b', 'c', etc.
+        text: option.text
+    }));
+
     questions.push(newQuestion); // Add the new question to the array
+
     res.status(201).json({ message: 'Question added successfully', questions });
 });
+
 
 // Endpoint to edit an existing question
 app.put('/api/questions/:id', (req, res) => {

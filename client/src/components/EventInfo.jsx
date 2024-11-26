@@ -68,7 +68,7 @@ const EventInfo = ({ data }) => {
             backdropFilter: 'blur(80px)',
           }}
         >
-          {/* <p style={{ fontWeight: 'bold', fontSize: '48px',color:"red" }}>Warning: Please look at the camera</p> */}
+          <p style={{ fontWeight: 'bold', fontSize: '48px',color:"red" }}>Warning: Please look at the camera</p>
         </div>
       )}
 

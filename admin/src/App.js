@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import "./App.css"
 
 const API_URL = 'http://localhost:4000/api';
 
@@ -24,26 +25,31 @@ function App() {
   };
 
   // Handle adding options to new question
+  // const addOptionToNewQuestion = () => {
+  //   setNewQuestion({
+  //     ...newQuestion,
+  //     options: [...newQuestion.options, { id: newQuestion.options.length + 1, text: '' }]
+  //   });
+  // };
+
+  // Add a new question
+  const addNewQuestion = () => {
+    // Make a POST request to add the new question
+    axios.post(`${API_URL}/questions`, newQuestion)
+      .then(response => {
+        // Reset the form after adding the question
+        setQuestions(response.data.questions);
+        setNewQuestion({ text: '', options: [] });
+      })
+      .catch(error => console.error('Error adding question:', error));
+  };
+  
+  // Ensure new options are created correctly on the frontend as well
   const addOptionToNewQuestion = () => {
     setNewQuestion({
       ...newQuestion,
       options: [...newQuestion.options, { id: newQuestion.options.length + 1, text: '' }]
     });
-  };
-
-  // Add a new question
-  const addNewQuestion = () => {
-    const newQuestionWithId = {
-      ...newQuestion,
-      id: questions.length + 1, // Set the new question id to be length of array + 1
-    };
-  
-    axios.post(`${API_URL}/questions`, newQuestionWithId)
-      .then(response => {
-        setQuestions(response.data.questions);
-        setNewQuestion({ text: '', options: [] }); // Clear new question input
-      })
-      .catch(error => console.error('Error adding question:', error));
   };
   
 

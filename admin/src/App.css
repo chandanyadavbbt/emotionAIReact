@@ -1,38 +1,141 @@
-.App {
+/* General Styling */
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #f4f7f6;
+  margin: 0;
+  padding: 0;
+  color: #333;
+}
+
+h1 {
+  font-size: 2.5rem;
+  color: #2c3e50;
   text-align: center;
+  margin-bottom: 1rem;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+h2 {
+  font-size: 1.8rem;
+  color: #34495e;
+  text-align: center;
+  margin-bottom: 1.5rem;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+/* Container */
+.App {
+  width: 90%;
+  max-width: 1000px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+/* Question List */
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+li {
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  background-color: #ecf0f1;
+  border: 1px solid #bdc3c7;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+li:hover {
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+input[type="text"] {
+  width: 90%;
+  padding: 10px;
+  margin-top: 5px;
+  border: 1px solid #bdc3c7;
+  border-radius: 4px;
+  font-size: 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  transition: border 0.3s ease;
+}
+
+input[type="text"]:focus {
+  border: 1px solid #3498db;
+  outline: none;
+}
+
+button {
+  background-color: #3498db;
   color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 10px;
 }
 
-.App-link {
-  color: #61dafb;
+button:hover {
+  background-color: #2980b9;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+button:focus {
+  outline: none;
+}
+
+/* Add New Question */
+.new-question {
+  padding: 1.5rem;
+  background-color: #dff9fb;
+  border-radius: 8px;
+  border: 1px solid #7ed6df;
+  margin-top: 2rem;
+}
+
+.new-question input[type="text"] {
+  width: 100%;
+}
+
+.new-question button {
+  margin-top: 1rem;
+}
+
+/* Option Styling */
+ul li ul {
+  margin-top: 1rem;
+}
+
+ul li ul li {
+  padding: 0.5rem;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  margin-bottom: 0.5rem;
+}
+
+ul li ul li input[type="text"] {
+  width: 80%;
+}
+
+/* Responsiveness */
+@media (max-width: 768px) {
+  .App {
+    width: 95%;
+    padding: 1rem;
   }
-  to {
-    transform: rotate(360deg);
+
+  h1 {
+    font-size: 2rem;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+  }
+
+  button {
+    padding: 8px 12px;
   }
 }
