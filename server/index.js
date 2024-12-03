@@ -9,7 +9,7 @@ const fs = require('fs');
 const port = 4000;
 
 const corsOptions = {
-    origin: ['http://localhost:3000','http://localhost:3001'],
+    origin: ['https://emotionaiui.netlify.app','http://localhost:3000','http://localhost:3001'],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
 };
@@ -73,17 +73,17 @@ const questions = [
             { id: 'e', text: 'Always' },
         ]
     },
-    {
-        id: 6,
-        text: "How often do you engage in physical exercise each week?",
-        options: [
-            { id: 'a', text: 'Not at all' },
-            { id: 'b', text: 'Once or twice' },
-            { id: 'c', text: 'Three to four times' },
-            { id: 'd', text: 'Five to six times' },
-            { id: 'e', text: 'Daily' },
-        ]
-    }
+    // {
+    //     id: 6,
+    //     text: "How often do you engage in physical exercise each week?",
+    //     options: [
+    //         { id: 'a', text: 'Not at all' },
+    //         { id: 'b', text: 'Once or twice' },
+    //         { id: 'c', text: 'Three to four times' },
+    //         { id: 'd', text: 'Five to six times' },
+    //         { id: 'e', text: 'Daily' },
+    //     ]
+    // }
 ];
 
 // Endpoint to add a new question
