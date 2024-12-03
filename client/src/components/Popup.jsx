@@ -14,7 +14,8 @@ const Popup = ({ onClose, onShowResult }) => {
           Show Result
         </button>
         <button o className="popup-button" onClick={onClose}>
-            <a href='http://localhost:3000'>
+            {/* <a href='http://localhost:3000'> */}
+            <a href='https://emotionaiui.netlify.app/'>
           Restart
             </a>
         </button>

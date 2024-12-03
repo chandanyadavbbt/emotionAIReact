@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './question.css';
 import TimerComponent from './TimeComponent';
+let backendServer="https://emotionbackend.onrender.com"
 
 const Question = ({ data }) => {
   
@@ -27,7 +28,8 @@ const Question = ({ data }) => {
 
   useEffect(() => {
     // Fetch questions from the backend
-    fetch('http://localhost:4000/api/questions')
+    // fetch('http://localhost:4000/api/questions')
+    fetch(`${backendServer}/api/questions`)
       .then((response) => response.json())
       .then((data) => setQuestions(data));
 
@@ -166,7 +168,8 @@ const Question = ({ data }) => {
     };
   
     // Send the data to the backend and receive a PDF
-    fetch('http://localhost:4000/api/save-summary', {
+    fetch(`${backendServer}/api/save-summary`, {
+    // fetch('http://localhost:4000/api/save-summary', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
